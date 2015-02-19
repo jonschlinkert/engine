@@ -1,0 +1,47 @@
+{
+  "name": "engine",
+  "description": "The most interesting project in the world > Verb",
+  "version": "0.1.0",
+  "homepage": "https://github.com/jonschlinkert/engine",
+  "author": {
+    "name": "Jon Schlinkert",
+    "url": "https://github.com/jonschlinkert"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jonschlinkert/engine.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jonschlinkert/engine/issues"
+  },
+  "license": {
+    "type": "MIT",
+    "url": "https://github.com/jonschlinkert/engine/blob/master/LICENSE"
+  },
+  "files": [
+    "index.js"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "chalk": "^0.5.1",
+    "delete": "^0.1.5",
+    "glob": "^4.4.0",
+    "log-symbols": "^1.0.1",
+    "parse-copyright": "^0.3.1",
+    "through2": "^0.6.3",
+    "update-banner": "^0.1.0",
+    "update-copyright": "^0.1.0",
+    "update-license": "^0.2.0"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
+  "keywords": []
+}

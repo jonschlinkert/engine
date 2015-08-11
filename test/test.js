@@ -5,7 +5,7 @@ var assert = require('assert');
 var should = require('should');
 var extend = require('extend-shallow');
 var clone = require('shallow-clone')
-var utils = require('../lib/utils');
+var support = require('./support');
 var Engine = require('..');
 var _ = require('lodash');
 var engine;
@@ -13,12 +13,12 @@ var engine;
 describe('engine', function() {
   beforeEach(function() {
     engine = new Engine();
-    engine.helper('each', utils.each);
+    engine.helper('each', support.each);
   });;
 
   it('should escape values in "escape" delimiters', function() {
     var strings = ['<p><%- value %></p>', '<p><%-value%></p>', '<p><%-\nvalue\n%></p>'];
-    var expected = strings.map(utils.constant('<p>&amp;&lt;&gt;&quot;&#39;&#96;\/</p>'));
+    var expected = strings.map(support.constant('<p>&amp;&lt;&gt;&quot;&#39;&#96;\/</p>'));
 
     var data = { 'value': '&<>"\'`\/' };
     var actual = strings.map(function(string) {
@@ -43,7 +43,7 @@ describe('engine', function() {
 
   it('should interpolate data object properties', function() {
     var strings = ['<%= a %>BC', '<%=a%>BC', '<%=\na\n%>BC'];
-    var expected = strings.map(utils.constant('ABC'));
+    var expected = strings.map(support.constant('ABC'));
 
     var actual = strings.map(function(string) {
       return engine.render(string, { 'a': 'A' });
@@ -77,7 +77,7 @@ describe('engine', function() {
   });
 
   it('should work with complex "interpolate" expressions:', function() {
-    utils.each({
+    support.each({
       '<%= a + b %>': '3',
       '<%= b - a %>': '1',
       '<%= a = b %>': '2',
@@ -135,7 +135,7 @@ describe('engine', function() {
   });
 
   it('should work with custom delimiters', function() {
-    utils.times(5, function(index) {
+    support.times(5, function(index) {
       var settingsClone = clone(engine.settings);
 
       var settings = extend(index ? engine.settings : {}, {
@@ -154,7 +154,7 @@ describe('engine', function() {
   });
 
   it('should work with custom delimiters containing special characters', function() {
-    utils.times(5, function(index) {
+    support.times(5, function(index) {
       var settingsClone = clone(engine.settings);
 
       var settings = extend(index ? engine.settings : {}, {
@@ -325,7 +325,7 @@ describe('engine', function() {
   });
 
   it('should coerce `text` argument to a string', function() {
-    var object = { 'toString': utils.constant('<%= a %>') };
+    var object = { 'toString': support.constant('<%= a %>') };
     var data = { 'a': 1 };
 
     assert.strictEqual(engine.compile(object)(data), '1');

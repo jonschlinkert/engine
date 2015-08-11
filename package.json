@@ -1,7 +1,7 @@
 {
   "name": "engine",
   "description": "Template engine based on Lo-Dash template, but adds features like the ability to register helpers and more easily set data to be used as context in templates.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "homepage": "https://github.com/jonschlinkert/engine",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "jonschlinkert/engine",
@@ -10,7 +10,8 @@
   },
   "license": "MIT",
   "files": [
-    "index.js"
+    "index.js",
+    "list"
   ],
   "main": "index.js",
   "engines": {
@@ -22,11 +23,11 @@
   "dependencies": {
     "collection-visit": "^0.1.1",
     "extend-shallow": "^2.0.1",
-    "for-in": "^0.1.4",
     "kind-of": "^2.0.0"
   },
   "devDependencies": {
     "ansi-red": "^0.1.1",
+    "for-in": "^0.1.4",
     "lodash": "^3.10.1",
     "mocha": "*",
     "shallow-clone": "^0.1.1",

@@ -131,8 +131,8 @@ Creates a compiled template function that can interpolate data properties in "in
 
 **Params**
 
-* **{string}**: The template string.
-* **{Object}**: The options object.
+* `str` **{string}**: The template string.
+* `opts` **{Object}**: The options object.
 * `escape` **{RegExp}**: The HTML "escape" delimiter.
 * `evaluate` **{RegExp}**: The "evaluate" delimiter.
 * `imports` **{Object}**: An object to import into the template as free variables.

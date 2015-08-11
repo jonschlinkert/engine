@@ -153,8 +153,8 @@ Engine.prototype._regex = function (opts) {
  * //=> 'Hello, jonschlinkert!'
  * ```
  *
- * @param {string} [string=''] The template string.
- * @param {Object} [opts] The options object.
+ * @param {string} `str` The template string.
+ * @param {Object} `opts` The options object.
  * @param {RegExp} [options.escape] The HTML "escape" delimiter.
  * @param {RegExp} [options.evaluate] The "evaluate" delimiter.
  * @param {Object} [options.imports] An object to import into the template as free variables.

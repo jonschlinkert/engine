@@ -1,23 +1,14 @@
 {
   "name": "engine",
-  "description": "The most interesting project in the world > Verb",
-  "version": "0.1.0",
+  "description": "Template engine based on Lo-Dash template, but adds features like the ability to register helpers and more easily set data to be used as context in templates.",
+  "version": "0.1.2",
   "homepage": "https://github.com/jonschlinkert/engine",
-  "author": {
-    "name": "Jon Schlinkert",
-    "url": "https://github.com/jonschlinkert"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jonschlinkert/engine.git"
-  },
+  "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "repository": "jonschlinkert/engine",
   "bugs": {
     "url": "https://github.com/jonschlinkert/engine/issues"
   },
-  "license": {
-    "type": "MIT",
-    "url": "https://github.com/jonschlinkert/engine/blob/master/LICENSE"
-  },
+  "license": "MIT",
   "files": [
     "index.js"
   ],
@@ -29,19 +20,44 @@
     "test": "mocha"
   },
   "dependencies": {
-    "chalk": "^0.5.1",
-    "delete": "^0.1.5",
-    "glob": "^4.4.0",
-    "log-symbols": "^1.0.1",
-    "parse-copyright": "^0.3.1",
-    "through2": "^0.6.3",
-    "update-banner": "^0.1.0",
-    "update-copyright": "^0.1.0",
-    "update-license": "^0.2.0"
+    "collection-visit": "^0.1.1",
+    "extend-shallow": "^2.0.1",
+    "for-in": "^0.1.4",
+    "kind-of": "^2.0.0"
   },
   "devDependencies": {
+    "ansi-red": "^0.1.1",
+    "lodash": "^3.10.1",
     "mocha": "*",
-    "should": "*"
+    "shallow-clone": "^0.1.1",
+    "should": "*",
+    "template-helpers": "^0.3.2",
+    "time-require": "jonschlinkert/time-require"
   },
-  "keywords": []
+  "keywords": [
+    "compile",
+    "data",
+    "engine",
+    "erb",
+    "helper",
+    "helpers",
+    "lodash",
+    "register",
+    "render",
+    "renderer",
+    "template",
+    "templates",
+    "underscore"
+  ],
+  "verb": {
+    "related": {
+      "list": [
+        "template",
+        "assemble",
+        "verb",
+        "scaffold",
+        "snippet"
+      ]
+    }
+  }
 }

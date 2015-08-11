@@ -7,13 +7,12 @@
   "esnext": true,
   "immed": true,
   "latedef": false,
-  "laxbreak": true,
   "laxcomma": false,
+  "mocha": true,
   "newcap": true,
   "noarg": true,
   "node": true,
   "sub": true,
-  "undef": "var",
-  "unused": true,
-  "mocha": true
+  "undef": true,
+  "unused": true
 }

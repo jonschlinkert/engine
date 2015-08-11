@@ -1,4 +1,4 @@
-*.DS_store
+*.DS_Store
 *.sublime-*
 _gh_pages
 bower_components
@@ -10,3 +10,6 @@ temp
 tmp
 TODO.md
 vendor
+.idea
+benchmark
+coverage

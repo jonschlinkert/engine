@@ -8,10 +8,12 @@
 
 'use strict';
 
-var typeOf = require('kind-of');
-var visit = require('collection-visit');
-var extend = require('extend-shallow');
 var utils = require('./lib/utils');
+var lazy = require('lazy-cache')(require);
+lazy('kind-of', 'typeOf');
+lazy('collection-visit', 'visit');
+lazy('object.omit', 'omit');
+lazy('assign-deep', 'assign');
 
 /**
  * Create an instance of `Engine` with the given options.
@@ -123,9 +125,9 @@ Engine.prototype.data = function(key, value) {
  */
 
 Engine.prototype._regex = function (opts) {
-  opts = extend({}, this.options, opts);
+  opts = lazy.assign({}, this.options, opts);
   var interpolate = opts.interpolate || utils.reNoMatch;
-  if (typeOf(opts.regex) === 'regexp') {
+  if (lazy.typeOf(opts.regex) === 'regexp') {
     interpolate = opts.regex;
   }
   var reString = (opts.escape || utils.reNoMatch).source
@@ -169,21 +171,23 @@ Engine.prototype._regex = function (opts) {
 Engine.prototype.compile = function (str, opts, settings) {
   var engine = this;
 
+
   if (!(this instanceof Engine)) {
-    if (typeOf(opts) !== 'object') opts = {};
+    if (lazy.typeOf(opts) !== 'object') opts = {};
     engine = new Engine(opts);
   }
 
   // Compile the regexp to match each delimiter.
-  settings = extend({}, engine.settings, settings);
-  opts = extend({}, engine.options, settings, opts);
+  settings = lazy.assign({}, engine.settings, settings || {});
+  opts = lazy.assign({}, engine.options, settings, opts);
   str = String(str);
 
-  var imports = extend({}, opts.imports, settings.imports);
+  var imports = lazy.assign({}, opts.imports, opts.helpers, settings.imports);
+
   imports.escape = utils.escape;
+  lazy.assign(imports, lazy.omit(engine.imports, 'engine'));
+  lazy.assign(imports, lazy.omit(engine.cache.data, 'engine'));
   imports.engine = engine;
-  extend(imports, (engine || {}).imports);
-  extend(imports, engine.cache.data || {});
 
   var keys = Object.keys(imports);
   var values = keys.map(function(key) {
@@ -238,9 +242,6 @@ Engine.prototype.compile = function (str, opts, settings) {
     .replace(utils.reEmptyStringMiddle, '$1')
     .replace(utils.reEmptyStringTrailing, '$1;');
 
-  keys.push('extend');
-  values.push(extend);
-
   // Frame code as the function body.
   source = 'function('
     + (variable || 'obj') + ') {\n'
@@ -282,8 +283,8 @@ Engine.prototype.compile = function (str, opts, settings) {
 
 Engine.prototype.render = function(str, data) {
   var ctx = this.cache.data || {};
-  extend(ctx, data);
-  extend(ctx, data ? data.imports : {});
+  lazy.assign(ctx, data);
+  lazy.assign(ctx, data ? data.imports : {});
   if (typeof str === 'function') {
     return str(ctx);
   }
@@ -298,7 +299,7 @@ Engine.prototype.render = function(str, data) {
  */
 
 Engine.prototype.visit = function(method, val) {
-  visit(this, method, val);
+  lazy.visit(this, method, val);
   return this;
 };
 

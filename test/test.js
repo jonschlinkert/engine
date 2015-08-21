@@ -182,6 +182,17 @@ describe('engine', function() {
     assert.strictEqual(compiled({}), '1');
   });
 
+  it('should support the "imports" option', function() {
+    engine = new Engine({
+      helpers: {
+        foo: function () {},
+        bar: function () {},
+        baz: function () {}
+      }
+    })
+    console.log(engine)
+  });
+
   it('should support the "variable" options', function() {
     var compiled = engine.compile(
       '<% each(data.a, function(value) { %>' +
@@ -406,7 +417,7 @@ describe('engine', function() {
   it('should work as an iteratee for methods like `map`', function() {
     var array = ['<%= a %>', '<%- b %>', '<% print(c) %>'];
 
-    var compiles = array.map(engine.compile);
+    var compiles = array.map(engine.compile.bind(engine));
     var data = { 'a': 'one', 'b': '`two`', 'c': 'three' };
 
     var actual = compiles.map(function(compiled) {

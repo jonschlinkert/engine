@@ -10,6 +10,8 @@
 
 var utils = require('./lib/utils');
 var lazy = require('lazy-cache')(require);
+lazy('set-value', 'set');
+lazy('get-value', 'get');
 lazy('kind-of', 'typeOf');
 lazy('collection-visit', 'visit');
 lazy('object.omit', 'omit');
@@ -35,8 +37,6 @@ function Engine(options) {
     return new Engine(options);
   }
   this.options = options || {};
-  this.imports = this.options.imports || {};
-  this.imports.engine = this;
   this.init(this.options);
 }
 
@@ -45,13 +45,27 @@ function Engine(options) {
  */
 
 Engine.prototype.init = function(opts) {
+  this.imports = opts.imports || {};
+  this.imports.engine = this;
+
+  opts.variable = '';
   this.settings = {};
   this.counter = 0;
   this.cache = {};
+
+  // regex
   opts.escape = utils.reEscape;
   opts.evaluate = utils.reEvaluate;
   opts.interpolate = utils.reInterpolate;
-  opts.variable = '';
+
+  // register helpers
+  if (opts.helpers) {
+    this.helpers(opts.helpers);
+  }
+  // load data
+  if (opts.data) {
+    this.data(opts.data);
+  }
 };
 
 /**
@@ -66,17 +80,17 @@ Engine.prototype.init = function(opts) {
  * //=> 'DOOWB'
  * ```
  *
- * @param  {String} `key`
+ * @param  {String} `prop`
  * @param  {Function} `fn`
  * @return {Object} Instance of `Engine` for chaining
  * @api public
  */
 
-Engine.prototype.helper = function(key, fn) {
-  if (typeof key === 'object') {
-    this.helpers(key);
+Engine.prototype.helper = function(prop, fn) {
+  if (typeof prop === 'object') {
+    this.helpers(prop);
   } else {
-    this.imports[key] = fn;
+    lazy.set(this.imports, prop, fn);
   }
   return this;
 };
@@ -84,13 +98,13 @@ Engine.prototype.helper = function(key, fn) {
 /**
  * Register an object of template helpers.
  *
- * @param  {Object|Array} `obj` Object or array of helper objects.
+ * @param  {Object|Array} `helpers` Object or array of helper objects.
  * @return {Object} Instance of `Engine` for chaining
  * @api public
  */
 
-Engine.prototype.helpers = function(obj) {
-  return this.visit('helper', obj);
+Engine.prototype.helpers = function(helpers) {
+  return this.visit('helper', helpers);
 };
 
 /**
@@ -108,12 +122,12 @@ Engine.prototype.helpers = function(obj) {
  * @api public
  */
 
-Engine.prototype.data = function(key, value) {
+Engine.prototype.data = function(prop, value) {
   this.cache.data = this.cache.data || {};
-  if (typeof key === 'object') {
-    this.visit('data', key);
+  if (typeof prop === 'object') {
+    this.visit('data', prop);
   } else {
-    this.cache.data[key] = value;
+    lazy.set(this.cache.data, prop, value);
   }
   return this;
 };
@@ -126,13 +140,22 @@ Engine.prototype.data = function(key, value) {
 
 Engine.prototype._regex = function (opts) {
   opts = lazy.assign({}, this.options, opts);
+  if (!opts.interpolate && !opts.regex && !opts.escape && !opts.evaluate) {
+    return utils.delimiters;
+  }
+
   var interpolate = opts.interpolate || utils.reNoMatch;
   if (lazy.typeOf(opts.regex) === 'regexp') {
     interpolate = opts.regex;
   }
+
   var reString = (opts.escape || utils.reNoMatch).source
     + '|' + interpolate.source
-    + '|' + (interpolate === utils.reInterpolate ? utils.reEsTemplate : utils.reNoMatch).source
+
+    + '|' + (interpolate === utils.reInterpolate
+      ? utils.reEsTemplate
+      : utils.reNoMatch).source
+
     + '|' + (opts.evaluate || utils.reNoMatch).source;
   return RegExp(reString + '|$', 'g');
 };
@@ -151,8 +174,8 @@ Engine.prototype._regex = function (opts) {
  * fn({user: 'doowb'});
  * //=> 'Hello, doowb!'
  *
- * fn({user: 'jonschlinkert'});
- * //=> 'Hello, jonschlinkert!'
+ * fn({user: 'halle'});
+ * //=> 'Hello, halle!'
  * ```
  *
  * @param {string} `str` The template string.
@@ -168,25 +191,26 @@ Engine.prototype._regex = function (opts) {
  * @api public
  */
 
-Engine.prototype.compile = function (str, opts, settings) {
+Engine.prototype.compile = function (str, options, settings) {
+  var assign = lazy.assign;
   var engine = this;
 
-
   if (!(this instanceof Engine)) {
-    if (lazy.typeOf(opts) !== 'object') opts = {};
-    engine = new Engine(opts);
+    if (lazy.typeOf(options) !== 'object') options = {};
+    engine = new Engine(options);
   }
 
-  // Compile the regexp to match each delimiter.
-  settings = lazy.assign({}, engine.settings, settings || {});
-  opts = lazy.assign({}, engine.options, settings, opts);
+  var opts = options || {};
+
+  settings = assign({}, engine.settings, opts.settings, settings);
+  opts = assign({}, engine.options, settings, opts);
   str = String(str);
 
-  var imports = lazy.assign({}, opts.imports, opts.helpers, settings.imports);
+  var imports = assign({}, opts.imports, opts.helpers, settings.imports);
 
   imports.escape = utils.escape;
-  lazy.assign(imports, lazy.omit(engine.imports, 'engine'));
-  lazy.assign(imports, lazy.omit(engine.cache.data, 'engine'));
+  assign(imports, lazy.omit(engine.imports, 'engine'));
+  assign(imports, lazy.omit(engine.cache.data, 'engine'));
   imports.engine = engine;
 
   var keys = Object.keys(imports);
@@ -202,7 +226,10 @@ Engine.prototype.compile = function (str, opts, settings) {
   // Use a sourceURL for easier debugging.
   var sourceURL = '//# sourceURL=' + ('sourceURL' in opts ? opts.sourceURL : ('engine.templateSources[' + (++engine.counter) + ']')) + '\n';
 
-  str.replace(engine._regex(opts), function (match, esc, interp, es6, evaluate, offset) {
+  // Compile the regexp to match each delimiter.
+  var re = engine._regex(opts);
+
+  str.replace(re, function (match, esc, interp, es6, evaluate, offset) {
     if (!interp) interp = es6;
 
     // Escape characters that can't be included in str literals.
@@ -283,11 +310,16 @@ Engine.prototype.compile = function (str, opts, settings) {
 
 Engine.prototype.render = function(str, data) {
   var ctx = this.cache.data || {};
-  lazy.assign(ctx, data);
-  lazy.assign(ctx, data ? data.imports : {});
+  var assign = lazy.assign;
+
+  ctx = assign({}, ctx, data);
+  ctx = assign({}, ctx, ctx.imports || {});
+  ctx = assign({}, ctx, ctx.helpers || {});
+
   if (typeof str === 'function') {
     return str(ctx);
   }
+
   var fn = this.compile(str);
   return fn(ctx);
 };
@@ -308,3 +340,9 @@ Engine.prototype.visit = function(method, val) {
  */
 
 module.exports = Engine;
+
+/**
+ * Expose `Engine`
+ */
+
+module.exports.utils = utils;

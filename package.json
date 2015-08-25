@@ -23,9 +23,11 @@
   "dependencies": {
     "assign-deep": "^0.3.1",
     "collection-visit": "^0.1.1",
+    "get-value": "^1.1.5",
     "kind-of": "^2.0.0",
     "lazy-cache": "^0.2.3",
-    "object.omit": "^2.0.0"
+    "object.omit": "^2.0.0",
+    "set-value": "^0.2.0"
   },
   "devDependencies": {
     "ansi-red": "^0.1.1",

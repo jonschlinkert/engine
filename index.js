@@ -9,13 +9,6 @@
 'use strict';
 
 var utils = require('./lib/utils');
-var lazy = require('lazy-cache')(require);
-lazy('set-value', 'set');
-lazy('get-value', 'get');
-lazy('kind-of', 'typeOf');
-lazy('collection-visit', 'visit');
-lazy('object.omit', 'omit');
-lazy('assign-deep', 'assign');
 
 /**
  * Create an instance of `Engine` with the given options.
@@ -46,7 +39,6 @@ function Engine(options) {
 
 Engine.prototype.init = function(opts) {
   this.imports = opts.imports || {};
-  this.imports.engine = this;
 
   opts.variable = '';
   this.settings = {};
@@ -90,7 +82,7 @@ Engine.prototype.helper = function(prop, fn) {
   if (typeof prop === 'object') {
     this.helpers(prop);
   } else {
-    lazy.set(this.imports, prop, fn);
+    utils.set(this.imports, prop, fn);
   }
   return this;
 };
@@ -127,7 +119,7 @@ Engine.prototype.data = function(prop, value) {
   if (typeof prop === 'object') {
     this.visit('data', prop);
   } else {
-    lazy.set(this.cache.data, prop, value);
+    utils.set(this.cache.data, prop, value);
   }
   return this;
 };
@@ -139,13 +131,13 @@ Engine.prototype.data = function(prop, value) {
  */
 
 Engine.prototype._regex = function (opts) {
-  opts = lazy.assign({}, this.options, opts);
+  opts = utils.assign({}, this.options, opts);
   if (!opts.interpolate && !opts.regex && !opts.escape && !opts.evaluate) {
     return utils.delimiters;
   }
 
   var interpolate = opts.interpolate || utils.reNoMatch;
-  if (lazy.typeOf(opts.regex) === 'regexp') {
+  if (utils.typeOf(opts.regex) === 'regexp') {
     interpolate = opts.regex;
   }
 
@@ -192,11 +184,11 @@ Engine.prototype._regex = function (opts) {
  */
 
 Engine.prototype.compile = function (str, options, settings) {
-  var assign = lazy.assign;
+  var assign = utils.assign;
   var engine = this;
 
   if (!(this instanceof Engine)) {
-    if (lazy.typeOf(options) !== 'object') options = {};
+    if (utils.typeOf(options) !== 'object') options = {};
     engine = new Engine(options);
   }
 
@@ -209,8 +201,8 @@ Engine.prototype.compile = function (str, options, settings) {
   var imports = assign({}, opts.imports, opts.helpers, settings.imports);
 
   imports.escape = utils.escape;
-  assign(imports, lazy.omit(engine.imports, 'engine'));
-  assign(imports, lazy.omit(engine.cache.data, 'engine'));
+  assign(imports, utils.omit(engine.imports, 'engine'));
+  assign(imports, utils.omit(engine.cache.data, 'engine'));
   imports.engine = engine;
 
   var keys = Object.keys(imports);
@@ -310,7 +302,7 @@ Engine.prototype.compile = function (str, options, settings) {
 
 Engine.prototype.render = function(str, data) {
   var ctx = this.cache.data || {};
-  var assign = lazy.assign;
+  var assign = utils.assign;
 
   ctx = assign({}, ctx, data);
   ctx = assign({}, ctx, ctx.imports || {});
@@ -319,9 +311,7 @@ Engine.prototype.render = function(str, data) {
   if (typeof str === 'function') {
     return str(ctx);
   }
-
-  var fn = this.compile(str);
-  return fn(ctx);
+  return this.compile(str)(ctx);
 };
 
 /**
@@ -331,7 +321,7 @@ Engine.prototype.render = function(str, data) {
  */
 
 Engine.prototype.visit = function(method, val) {
-  lazy.visit(this, method, val);
+  utils.visit(this, method, val);
   return this;
 };
 

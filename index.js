@@ -29,6 +29,7 @@ function Engine(options) {
   if (!(this instanceof Engine)) {
     return new Engine(options);
   }
+
   this.options = options || {};
   this.init(this.options);
 }
@@ -46,9 +47,9 @@ Engine.prototype.init = function(opts) {
   this.cache = {};
 
   // regex
-  opts.escape = utils.reEscape;
-  opts.evaluate = utils.reEvaluate;
-  opts.interpolate = utils.reInterpolate;
+  opts.escape = opts.escape || utils.reEscape;
+  opts.evaluate = opts.evaluate || utils.reEvaluate;
+  opts.interpolate = opts.interpolate || utils.reInterpolate;
 
   // register helpers
   if (opts.helpers) {

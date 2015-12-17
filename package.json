@@ -1,7 +1,7 @@
 {
   "name": "engine",
   "description": "Template engine based on Lo-Dash template, but adds features like the ability to register helpers and more easily set data to be used as context in templates.",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "homepage": "https://github.com/jonschlinkert/engine",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "jonschlinkert/engine",

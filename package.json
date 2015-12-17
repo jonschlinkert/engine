@@ -21,7 +21,7 @@
     "test": "mocha"
   },
   "dependencies": {
-    "assign-deep": "^0.3.1",
+    "assign-deep": "^0.4.3",
     "collection-visit": "^0.2.0",
     "get-value": "^1.2.1",
     "kind-of": "^2.0.1",

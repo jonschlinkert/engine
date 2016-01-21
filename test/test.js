@@ -426,4 +426,29 @@ describe('engine', function() {
 
     assert.deepEqual(actual, ['one', '&#96;two&#96;', 'three']);
   });
+
+  describe('delimiters', function() {
+    afterEach(function() {
+      Engine.utils.delimiters.lastIndex = 0;
+    })
+    it('should be `true` for `<%- foo %>`', function() {
+      assert(Engine.utils.delimiters.test('<%- foo %>'));
+    });
+
+    it('should be `true` for `<%= foo %>`', function() {
+      assert(Engine.utils.delimiters.test('<%= foo %>'));
+    });
+
+    it('should be `true` for `<% foo %>`', function() {
+      assert(Engine.utils.delimiters.test('<% foo %>'));
+    });
+
+    it('should be `true` for `${foo}`', function() {
+      assert(Engine.utils.delimiters.test('${foo}'));
+    });
+
+    it('should be `false` for `foo`', function() {
+      assert(Engine.utils.delimiters.test('foo') === false);
+    });
+  });
 });

@@ -91,6 +91,19 @@ Engine.prototype.helper = function(prop, fn) {
 /**
  * Register an object of template helpers.
  *
+ * ```js
+ * engine.helpers({
+ *  upper: function(str) {
+ *    return str.toUpperCase();
+ *  },
+ *  lower: function(str) {
+ *    return str.toLowerCase();
+ *  }
+ * });
+ *
+ * // Or, just require in `template-helpers`
+ * engine.helpers(require('template-helpers')._);
+ * ```
  * @param  {Object|Array} `helpers` Object or array of helper objects.
  * @return {Object} Instance of `Engine` for chaining
  * @api public

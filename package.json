@@ -11,7 +11,9 @@
   "license": "MIT",
   "files": [
     "index.js",
-    "lib"
+    "lib",
+    "LICENSE",
+    "README.md"
   ],
   "main": "index.js",
   "engines": {
@@ -33,6 +35,7 @@
     "ansi-red": "^0.1.1",
     "extend-shallow": "^2.0.1",
     "for-in": "^0.1.4",
+    "gulp-format-md": "^0.1.9",
     "lodash": "^3.10.1",
     "mocha": "*",
     "shallow-clone": "^0.1.1",
@@ -56,14 +59,28 @@
     "underscore"
   ],
   "verb": {
+    "toc": false,
+    "layout": "default",
+    "tasks": [
+      "readme"
+    ],
+    "plugins": [
+      "gulp-format-md"
+    ],
     "related": {
       "list": [
-        "template",
         "assemble",
-        "verb",
-        "scaffold",
-        "snippet"
+        "template",
+        "template-helpers",
+        "verb"
       ]
+    },
+    "reflinks": [
+      "verb",
+      "verb-generate-readme"
+    ],
+    "lint": {
+      "reflinks": true
     }
   }
 }

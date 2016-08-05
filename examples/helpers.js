@@ -2,7 +2,7 @@ require('time-require');
 
 var Engine = require('..');
 var engine = new Engine();
-var helpers = require('template-helpers')._;
+var helpers = require('template-helpers')();
 
 
 engine.helpers(helpers);

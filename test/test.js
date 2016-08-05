@@ -1,20 +1,19 @@
 'use strict';
 
-/* deps: mocha */
+require('mocha');
+require('should');
 var assert = require('assert');
-var should = require('should');
 var extend = require('extend-shallow');
-var clone = require('shallow-clone')
+var clone = require('shallow-clone');
 var support = require('./support');
 var Engine = require('..');
-var _ = require('lodash');
 var engine;
 
 describe('engine', function() {
   beforeEach(function() {
     engine = new Engine();
     engine.helper('each', support.each);
-  });;
+  });
 
   it('should escape values in "escape" delimiters', function() {
     var strings = ['<p><%- value %></p>', '<p><%-value%></p>', '<p><%-\nvalue\n%></p>'];
@@ -35,8 +34,8 @@ describe('engine', function() {
     + '} %></ul>'
     );
 
-    var data = { 'collection': { 'a': 'A', 'b': 'B' } },
-        actual = compiled(data);
+    var data = { 'collection': { 'a': 'A', 'b': 'B' } };
+    var actual = compiled(data);
 
     assert.strictEqual(actual, '<ul><li>A</li><li>B</li></ul>');
   });
@@ -71,7 +70,7 @@ describe('engine', function() {
     var actual;
     try {
       actual = compiled();
-    } catch(e) {}
+    } catch (e) {}
 
     assert.strictEqual(actual, 'function');
   });
@@ -163,8 +162,8 @@ describe('engine', function() {
         'interpolate': /<\?=([\s\S]+?)\?>/g
       });
 
-      var compiled = engine.compile('<ul><? each(collection, function(value, index) { ?><li><?= index ?>: <?- value ?></li><? }); ?></ul>', index ? null : settings),
-          expected = '<ul><li>0: a &amp; A</li><li>1: b &amp; B</li></ul>';
+      var compiled = engine.compile('<ul><? each(collection, function(value, index) { ?><li><?= index ?>: <?- value ?></li><? }); ?></ul>', index ? null : settings);
+      var expected = '<ul><li>0: a &amp; A</li><li>1: b &amp; B</li></ul>';
       var data = { 'collection': ['a & A', 'b & B'] };
 
       assert.strictEqual(compiled(data), expected);
@@ -185,12 +184,12 @@ describe('engine', function() {
   it('should support the "imports" option', function() {
     engine = new Engine({
       helpers: {
-        foo: function () {},
-        bar: function () {},
-        baz: function () {}
+        foo: function() {},
+        bar: function() {},
+        baz: function() {}
       }
-    })
-    console.log(engine)
+    });
+    console.log(engine);
   });
 
   it('should support the "variable" options', function() {
@@ -204,7 +203,7 @@ describe('engine', function() {
 
     try {
       assert.strictEqual(compiled(data), '123');
-    } catch(e) {
+    } catch (e) {
       assert(false, e.message);
     }
   });
@@ -217,8 +216,8 @@ describe('engine', function() {
   });
 
   it('should use a `with` statement by default', function() {
-    var compiled = engine.compile('<%= index %><%= collection[index] %><% each(collection, function(value, index) { %><%= index %><% }); %>'),
-        actual = compiled({ 'index': 1, 'collection': ['a', 'b', 'c'] });
+    var compiled = engine.compile('<%= index %><%= collection[index] %><% each(collection, function(value, index) { %><%= index %><% }); %>');
+    var actual = compiled({ 'index': 1, 'collection': ['a', 'b', 'c'] });
 
     assert.strictEqual(actual, '1b012');
   });
@@ -280,7 +279,7 @@ describe('engine', function() {
     /*@cc_on @*/
     try {
       compiled();
-    } catch(e) {
+    } catch (e) {
       pass = false;
     }
     assert(pass, true);
@@ -363,7 +362,7 @@ describe('engine', function() {
 
     try {
       engine.compile('')(1);
-    } catch(e) {
+    } catch (e) {
       pass = false;
     }
 
@@ -372,7 +371,7 @@ describe('engine', function() {
 
     try {
       engine.compile('', 1)(1);
-    } catch(e) {
+    } catch (e) {
       pass = false;
     }
     assert(pass, '`options` value');
@@ -392,7 +391,7 @@ describe('engine', function() {
     var source;
     try {
       engine.compile('<% if x %>');
-    } catch(e) {
+    } catch (e) {
       source = e.source;
     }
     assert(source.indexOf('__p') > -1);
@@ -405,7 +404,7 @@ describe('engine', function() {
 
     try {
       engine.compile('<% if x %>', options);
-    } catch(e) {
+    } catch (e) {
       values[1] = e.source;
     }
 
@@ -430,7 +429,8 @@ describe('engine', function() {
   describe('delimiters', function() {
     afterEach(function() {
       Engine.utils.delimiters.lastIndex = 0;
-    })
+    });
+
     it('should be `true` for `<%- foo %>`', function() {
       assert(Engine.utils.delimiters.test('<%- foo %>'));
     });

@@ -144,7 +144,7 @@ Engine.prototype.data = function(prop, value) {
  * @return {RegExp}
  */
 
-Engine.prototype._regex = function (opts) {
+Engine.prototype._regex = function(opts) {
   opts = utils.assign({}, this.options, opts);
   if (!opts.interpolate && !opts.regex && !opts.escape && !opts.evaluate) {
     return utils.delimiters;
@@ -197,7 +197,7 @@ Engine.prototype._regex = function (opts) {
  * @api public
  */
 
-Engine.prototype.compile = function (str, options, settings) {
+Engine.prototype.compile = function(str, options, settings) {
   var assign = utils.assign;
   var engine = this;
 
@@ -235,7 +235,7 @@ Engine.prototype.compile = function (str, options, settings) {
   // Compile the regexp to match each delimiter.
   var re = engine._regex(opts);
 
-  str.replace(re, function (match, esc, interp, es6, evaluate, offset) {
+  str.replace(re, function(match, esc, interp, es6, evaluate, offset) {
     if (!interp) interp = es6;
 
     // Escape characters that can't be included in str literals.
@@ -284,7 +284,7 @@ Engine.prototype.compile = function (str, options, settings) {
     + (isEvaluating ? ', __j = Array.prototype.join;\nfunction print() { __p += __j.call(arguments, "") }\n' : ';\n')
     + source + 'return __p\n}';
 
-  var result = utils.tryCatch(function () {
+  var result = utils.tryCatch(function() {
     return Function(keys, sourceURL + 'return ' + source).apply(null, values);
   });
 

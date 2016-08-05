@@ -8,7 +8,6 @@ var forIn = require('for-in');
 
 var support = module.exports;
 
-
 support.MAX_ARRAY_LENGTH = 4294967295;
 
 /**
@@ -91,7 +90,7 @@ support.times = function times(n, fn, thisArg) {
  */
 
 support.bindCallback = function bindCallback(fn, thisArg, argCount) {
-  if (typeof fn != 'function') {
+  if (typeof fn !== 'function') {
     return support.identity;
   }
   if (thisArg === undefined) {
@@ -119,7 +118,6 @@ support.bindCallback = function bindCallback(fn, thisArg, argCount) {
     return fn.apply(thisArg, arguments);
   };
 };
-
 
 support.each = function each(obj, fn, thisArg) {
   if (Array.isArray(obj)) {

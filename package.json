@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "assign-deep": "^0.4.5",
-    "collection-visit": "^0.2.1",
+    "collection-visit": "^0.2.3",
     "get-value": "^2.0.6",
     "kind-of": "^3.0.4",
     "lazy-cache": "^2.0.1",

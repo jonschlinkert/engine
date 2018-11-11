@@ -1,13 +1,18 @@
-require('time-require');
+// const Engine = require('..');
+// const engine = new Engine();
+// const helpers = require('template-helpers')._;
 
-var Engine = require('..');
-var engine = new Engine();
-var helpers = require('template-helpers')._;
+// engine.helpers(helpers);
 
+// engine.data({ first: 'Brian' });
+// const res = engine.render('<%= uppercase(first) %>');
+// //=> 'BRIAN'
+// console.log(res);
 
-engine.helpers(helpers);
+const lowercase = str => str.toLowerCase();
+const uppercase = str => str.toUpperCase();
+const titlecase = str => {
+  return str.toLowerCase().replace(/(?=\b)(\w)/g, (m, $1) => $1.toUpperCase());
+};
 
-engine.data({first: 'Brian'});
-var res = engine.render('<%= uppercase(first) %>');
-//=> 'BRIAN'
-console.log(res);
+console.log(titlecase('foo-bar'));

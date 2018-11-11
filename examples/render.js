@@ -1,7 +1,7 @@
-var Engine = require('..');
-var engine = new Engine();
+const Engine = require('..');
+const engine = new Engine();
 
-engine.data({first: 'Brian'});
-var res = engine.render('<%= last %>, <%= first %>', {last: 'Woodward'});
+engine.data({ first: 'Brian' });
+const res = engine.render('<%= last %>, <%= first %>', { last: 'Woodward' });
 //=> 'Woodward, Brian'
 console.log(res);

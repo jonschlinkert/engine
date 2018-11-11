@@ -1,40 +1,30 @@
-var Engine = require('..');
-var engine = new Engine();
+const Engine = require('..');
+const engine = new Engine();
+const fs = require('fs');
+const str = fs.readFileSync('test/fixtures/each.tmpl', 'utf8');
 
-var fs = require('fs');
-var str = fs.readFileSync('test/fixtures/each.tmpl', 'utf8');
-
-var a = {name: 'Halle', foo: 'bar'};
+const a = { name: 'Halle', foo: 'bar' };
 
 a.fn = engine.compile('a <%= this.name %> <%= this.foo %> b');
 console.log(a.fn());
 
-var fn = engine.compile('a <%= obj.a %> <%= this.b %> b');
-console.log(fn({a: 'Jon', b: 'S'}));
-
+const fn = engine.compile('a <%= obj.a %> <%= this.b %> b');
+console.log(fn({ a: 'Jon', b: 'S' }));
 
 // engine.data('one', 'AAA');
 // engine.data('two', 'BBB');
 
-// var fn = engine.compile('a <%= this.one %> <%= this.two %> b');
+// const fn = engine.compile('a <%= this.one %> <%= this.two %> b');
 // console.log(fn());
 
-function each(arr, fn) {
-  var res = [];
-  arr.forEach(function (val) {
-    res.push(fn(val));
-  });
-  return res;
-}
-
-engine.data({foo: 'bar'})
-
-var res = engine.render(str, {
-  each: each,
+engine.data({ foo: 'bar' });
+const each = (arr, fn) => arr.map(fn);
+const res = engine.render(str, {
+  each,
   list: ['a', 'b', 'c', 'd'],
   imports: {
-    each: each,
-    upper: function(str) {
+    each,
+    upper(str) {
       return str.toUpperCase();
     }
   }

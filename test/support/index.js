@@ -1,14 +1,6 @@
 'use strict';
 
-var forIn = require('for-in');
-
-/**
- * Expose `support` methods
- */
-
-var support = module.exports;
-
-
+const support = module.exports;
 support.MAX_ARRAY_LENGTH = 4294967295;
 
 /**
@@ -18,11 +10,7 @@ support.MAX_ARRAY_LENGTH = 4294967295;
  * @return {*}
  */
 
-support.constant = function constant(val) {
-  return function() {
-    return val;
-  };
-};
+support.constant = val => () => val;
 
 /**
  * This method returns the first argument provided to it.
@@ -31,9 +19,7 @@ support.constant = function constant(val) {
  * @returns {*} Returns `value`.
  */
 
-support.identity = function identity(value) {
-  return value;
-};
+support.identity = val => val;
 
 /**
  * Invokes the iteratee function `n` times, returning an array of the results
@@ -56,7 +42,7 @@ support.identity = function identity(value) {
  * // => invokes `mage.castSpell` three times with `n` of `0`, `1`, and `2`
  */
 
-support.times = function times(n, fn, thisArg) {
+support.times = (n, fn, thisArg) => {
   n = Math.floor(n);
 
   // Exit early to avoid a JSC JIT bug in Safari 8
@@ -120,7 +106,6 @@ support.bindCallback = function bindCallback(fn, thisArg, argCount) {
   };
 };
 
-
 support.each = function each(obj, fn, thisArg) {
   if (Array.isArray(obj)) {
     return forEach(obj, fn, thisArg);
@@ -134,6 +119,14 @@ function forEach(arr, fn, thisArg) {
   var len = arr.length, i = -1;
   while (++i < len) {
     if (fn.call(thisArg, arr[i], i, arr) === false) {
+      break;
+    }
+  }
+}
+
+function forIn(obj, fn, thisArg) {
+  for (var key in obj) {
+    if (fn.call(thisArg, obj[key], key, obj) === false) {
       break;
     }
   }

@@ -11,9 +11,7 @@
   "license": "MIT",
   "files": [
     "index.js",
-    "lib",
-    "LICENSE",
-    "README.md"
+    "utils.js"
   ],
   "main": "index.js",
   "engines": {
@@ -22,26 +20,10 @@
   "scripts": {
     "test": "mocha"
   },
-  "dependencies": {
-    "assign-deep": "^0.4.3",
-    "collection-visit": "^0.2.0",
-    "get-value": "^1.2.1",
-    "kind-of": "^2.0.1",
-    "lazy-cache": "^0.2.3",
-    "object.omit": "^2.0.0",
-    "set-value": "^0.2.0"
-  },
   "devDependencies": {
-    "ansi-red": "^0.1.1",
-    "extend-shallow": "^2.0.1",
-    "for-in": "^0.1.4",
-    "gulp-format-md": "^0.1.9",
-    "lodash": "^3.10.1",
-    "mocha": "*",
-    "shallow-clone": "^0.1.1",
-    "should": "*",
-    "template-helpers": "^0.3.2",
-    "time-require": "jonschlinkert/time-require"
+    "template-helpers": "^0.6.7",
+    "mocha": "^3.5.3",
+    "gulp-format-md": "^1.0.0"
   },
   "keywords": [
     "compile",
@@ -75,12 +57,11 @@
         "verb"
       ]
     },
-    "reflinks": [
-      "verb",
-      "verb-generate-readme"
-    ],
     "lint": {
       "reflinks": true
     }
+  },
+  "dependencies": {
+    "assign-deep": "^1.0.0"
   }
 }

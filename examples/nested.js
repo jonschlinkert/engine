@@ -1,18 +1,17 @@
-var Engine = require('..');
-var engine = new Engine();
-
-var res = engine.render('<%= a.b.c(bar(name)) %>', {
-  bar: function (val) {
+const Engine = require('..');
+const engine = new Engine();
+const res = engine.render('<%= a.b.c(bar(name)) %>', {
+  bar(val) {
     return 'Hello ' + val + '!';
   },
   name: 'Brian',
   a: {
     b: {
-      c: function (fn) {
-        return fn
+      c(fn) {
+        return fn;
       }
     }
   }
-})
+});
 
 console.log(res);

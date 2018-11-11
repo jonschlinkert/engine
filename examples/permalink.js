@@ -1,15 +1,14 @@
-var Engine = require('..');
-var engine = new Engine({regex: /:([-(\w.,|_ )]+)/g});
-
-var res = engine.render('a/:foo/:upper(double(name, bar))/b/c/d/:baz/e', {
+const Engine = require('..');
+const engine = new Engine({ regex: /:([-(\w.,|_ )]+)/g });
+const res = engine.render('a/:foo/:upper(double(name, bar))/b/c/d/:baz/e', {
   foo: 'AAA',
   bar: 'BBB',
   baz: 'CCC',
   name: 'Brian',
-  double: function (val1, val2) {
-    return val1 + val1 + '-' + val2;
+  double(a, b) {
+    return a + a + '-' + b;
   },
-  upper: function (val) {
+  upper(val) {
     return val.toUpperCase();
   }
 });
